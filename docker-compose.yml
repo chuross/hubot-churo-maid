@@ -8,3 +8,4 @@ services:
       - redis:redis
   redis:
     image: redis:3.2.3
+    container_name: hubot-redis
