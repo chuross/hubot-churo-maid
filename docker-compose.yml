@@ -1,0 +1,10 @@
+version: '2'
+services:
+  maid:
+    build: ./
+    image: chuross/hubot-maid
+    container_name: hubot-maid
+    links:
+      - redis:redis
+  redis:
+    image: redis:3.2.3
