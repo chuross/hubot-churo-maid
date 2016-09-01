@@ -3,7 +3,7 @@ FROM node:6.5.0
 RUN apt-get update && apt-get install -y redis-tools
 RUN npm install -g hubot coffee-script
 
-ENV HUBOT_MAID_WORKDIR ~/workspace
+ENV HUBOT_MAID_WORKDIR /workspace
 ENV REDIS_URL redis
 
 WORKDIR $HUBOT_MAID_WORKDIR
