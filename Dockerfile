@@ -16,4 +16,4 @@ COPY package.json .
 
 RUN npm install
 
-CMD ["bash", "bin/hubot"]
+CMD ["sh", "bin/hubot"]
