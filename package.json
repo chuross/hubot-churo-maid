@@ -8,6 +8,7 @@
     "start": "sh bin/hubot"
   },
   "dependencies": {
+    "axios": "^0.14.0",
     "babel-core": "^6.14.0",
     "babel-hubot": "^0.2.0",
     "babel-plugin-add-module-exports": "^0.2.1",
