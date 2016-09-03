@@ -8,9 +8,8 @@ export class OptionParser {
     let params = {};
 
     rules.forEach(rule => {
-      const optionName = rule[1].substr(2); // remove `--`
-      parser.on(optionName, () => {
-        Object.assign(params, { [optionName]: true });
+      parser.on('*', (name, value) => {
+        Object.assign(params, { [name]: value || true });
       });
     });
 
