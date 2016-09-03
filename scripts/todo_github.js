@@ -1,4 +1,6 @@
 import { OptionParser } from './optionParser'
+import axios from 'axios'
+
 
 /**
 * Description:
@@ -11,11 +13,23 @@ import { OptionParser } from './optionParser'
 const githubUrl = process.env.HUBOT_MAID_GITHUB_URL;
 
 export default function(robot) {
+
   robot.respond(/todo|todo (.*)/i, msg => {
     const params = OptionParser.parse([
-      ['-a', '--all']
+      ['-a', '--all'],
+      ['-n', '--name STRING']
     ], msg.message.text.split(' '));
 
-    msg.send('仕事はこちらです！');
+    const targetUser = params.name || msg.message.user.name;
+
+    const url = `${githubUrl}/repos/${targetUser}/todo/issues`;
+    axios.get(url)
+      .then(response => {
+        msg.send('仕事はこちらです！');
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   });
 }
