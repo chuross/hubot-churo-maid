@@ -17,6 +17,5 @@ export default function(robot) {
     ], msg.message.text.split(' '));
 
     msg.send('仕事はこちらです！');
-    msg.send(params.all || false);
   });
 }
