@@ -1,6 +1,6 @@
 /*
 * Commands:
-*   おはよう - 朝の挨拶。今日の予定やタスク一覧を出してくれる。
+*   おはよう - 朝の挨拶
 */
 export default function(robot) {
 
