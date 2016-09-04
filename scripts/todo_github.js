@@ -32,7 +32,8 @@ export default function(robot) {
     }).then(response => {
       msg.send('残りの仕事です');
       response.data.forEach(issue => {
-        msg.send(`#${issue.number} *<${issue.url}|${issue.title}>*`);
+        const priority = issue.labels.filter(label => label.name === 'high').length > 0 ? '[*優先度高*]' : '[優先度低]';
+        msg.send(`・${priority} #${issue.number} *<${issue.url}|${issue.title}>*`);
       });
     }).catch(Utils.error(msg));
   });
