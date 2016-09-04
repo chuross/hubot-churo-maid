@@ -30,7 +30,7 @@ export default function(robot) {
     axios.get(url, {
       params: query
     }).then(response => {
-      msg.send('残りの仕事です');
+      msg.send('今残っている仕事です！');
       response.data.forEach(issue => {
         msg.send(`・${getPriorityString(issue)} #${issue.number} *<${issue.html_url}|${issue.title}>*`);
       });
@@ -55,7 +55,7 @@ export default function(robot) {
       labels: [priority]
     }, githubHeader).then(response => {
       const issue = response.data;
-      msg.send('仕事を追加しました！');
+      msg.send('追加しました！お仕事頑張ってください！');
       msg.send(`${getPriorityString(issue)} #${issue.number} *<${issue.html_url}|${issue.title}>*`);
     }).catch(Utils.error(msg));
   });
