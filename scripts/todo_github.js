@@ -32,8 +32,7 @@ export default function(robot) {
     }).then(response => {
       msg.send('残りの仕事です');
       response.data.forEach(issue => {
-        const priority = issue.labels.filter(label => label.name === 'high').length > 0 ? '[*優先度高*]' : '[優先度低]';
-        msg.send(`・${priority} #${issue.number} *<${issue.url}|${issue.title}>*`);
+        msg.send(`・${getPriorityString(issue)} #${issue.number} *<${issue.html_url}|${issue.title}>*`);
       });
     }).catch(Utils.error(msg));
   });
@@ -57,7 +56,7 @@ export default function(robot) {
     }, githubHeader).then(response => {
       const issue = response.data;
       msg.send('仕事を追加しました！');
-      msg.send(`#${issue.number} *<${issue.html_url}|${issue.title}>*`);
+      msg.send(`${getPriorityString(issue)} #${issue.number} *<${issue.html_url}|${issue.title}>*`);
     }).catch(Utils.error(msg));
   });
 
@@ -78,4 +77,8 @@ export default function(robot) {
       msg.send('タスクを閉じます。おつかれさまでした！');
     }).catch(Utils.error(msg));
   });
+}
+
+function getPriorityString(issue) {
+  return issue.labels.filter(label => label.name === 'high').length > 0 ? '[*優先度高*]' : '[優先度低]';
 }
