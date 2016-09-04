@@ -8,6 +8,7 @@ services:
       - redis:redis
     environment:
       HUBOT_SLACK_TOKEN:
+      HUBOT_MAID_GITHUB_URL: https://api.github.com
       HUBOT_MAID_GITHUB_TOKEN:
   redis:
     image: redis:3.2.3
