@@ -13,6 +13,7 @@ import { Utils } from './Utils'
 */
 const githubUrl = process.env.HUBOT_MAID_GITHUB_URL;
 const githubToken = process.env.HUBOT_MAID_GITHUB_TOKEN;
+const githubHeader = { headers: { Authorization: `token ${githubToken}` } }
 
 export default function(robot) {
 
@@ -51,12 +52,28 @@ export default function(robot) {
     axios.post(url, {
       title: title,
       labels: labels
-    }, {
-      headers: {
-        Authorization: `token ${githubToken}`
-      }
-    }).then(response => {
+    }, githubHeader).then(response => {
+      const issue = response.data;
       msg.send('仕事を追加しました！');
+      msg.send(`#${issue.number} *<${issue.url}|${issue.title}>*`);
+    }).catch(Utils.error(msg));
+  });
+
+  robot.respond(/todo done (.*)/i, msg => {
+    const text = msg.message.text;
+
+    const params = OptionParser.parse([
+      ['-n', '--name STRING']
+    ], msg.message.text.split(' '));
+
+    const userName = params.name || msg.message.user.name;
+    const issueId = text.split(' ')[3];
+
+    const url = `${githubUrl}/repos/${userName}/todo/issues/${issueId}`;
+    axios.patch(url, {
+      state: 'closed'
+    }, githubHeader).then(response => {
+      msg.send('タスクを閉じます。おつかれさまでした！');
     }).catch(Utils.error(msg));
   });
 }
