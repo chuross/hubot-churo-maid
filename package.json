@@ -5,7 +5,8 @@
   "author": "chuross <azarasi.mo.mo@gmail.com>",
   "description": "何でもお願いしときたい",
   "scripts": {
-    "start": "sh bin/hubot"
+    "start": "sh bin/hubot",
+    "start-slack": "sh bin/hubot-slack"
   },
   "dependencies": {
     "axios": "^0.14.0",
