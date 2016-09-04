@@ -57,7 +57,7 @@ export default function(robot) {
     }, githubHeader).then(response => {
       const issue = response.data;
       msg.send('仕事を追加しました！');
-      msg.send(`#${issue.number} *<${issue.url}|${issue.title}>*`);
+      msg.send(`#${issue.number} *<${issue.html_url}|${issue.title}>*`);
     }).catch(Utils.error(msg));
   });
 
