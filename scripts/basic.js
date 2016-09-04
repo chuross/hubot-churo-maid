@@ -8,6 +8,6 @@
 export default function(robot) {
 
   robot.respond(/おはよう/, msg => {
-    msg.send('おはようございます！');
+    msg.send('おはようございます！今日も1日頑張っていきましょう！');
   });
 }
