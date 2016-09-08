@@ -14,9 +14,9 @@ WORKDIR $HUBOT_MAID_WORKDIR
 
 COPY bin bin/
 COPY scripts scripts/
-COPY external-scripts.json .
-COPY package.json .
-COPY .babelrc .
+COPY external-scripts.json ./
+COPY package.json ./
+COPY .babelrc ./
 
 RUN npm install
 
