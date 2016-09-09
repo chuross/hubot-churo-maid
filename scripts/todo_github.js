@@ -1,7 +1,6 @@
 import axios from 'axios'
-import { OptionParser } from './optionParser'
+import args from 'minimist'
 import { Utils } from './Utils'
-
 
 /**
 * Description:
@@ -11,25 +10,27 @@ import { Utils } from './Utils'
 *   todo create :title [-l 優先度低, -n 名前] - 指定タイトルでタスクを作る
 *   todo done :issue_id [-n 名前] - 指定IDのタスクを終了する
 */
-const githubUrl = process.env.HUBOT_MAID_GITHUB_URL;
+const githubUrl = process.env.HUBOT_MAID_GITHUB_URL || 'https://api.github.com';
 const githubToken = process.env.HUBOT_MAID_GITHUB_TOKEN;
 const githubHeader = { headers: { Authorization: `token ${githubToken}` } }
 
 export default function(robot) {
 
-  robot.respond(/todo list|今日の仕事/i, msg => {
-    const params = OptionParser.parse([
-      ['-a', '--all'],
-      ['-n', '--name STRING']
-    ], msg.message.text.split(' '));
+  robot.respond(/todo$|todo -(.*)/i, msg => {
+    const params = args(Utils.argString(robot, 'todo', msg.message.text), {
+      alias: {
+        n: 'name',
+        a: 'all'
+      }
+    });
 
     const userName = params.name || msg.message.user.name;
     const query = params.all ? {} : { labels: 'high' }
 
     const url = `${githubUrl}/repos/${userName}/todo/issues`;
-    axios.get(url, {
+    axios.get(url, Object.assign({
       params: query
-    }).then(response => {
+    }, githubHeader)).then(response => {
       msg.send('今残っている仕事です！');
       response.data.forEach(issue => {
         msg.send(`・${getPriorityString(issue)} #${issue.number} *<${issue.html_url}|${issue.title}>*`);
@@ -37,15 +38,15 @@ export default function(robot) {
     }).catch(Utils.error(msg));
   });
 
-  robot.respond(/todo create (.*)/i, msg => {
-    const text = msg.message.text;
+  robot.respond(/todo add (.+)$/i, msg => {
+    const params = args(Utils.argString(robot, 'todo add', msg.message.text), {
+      alias: {
+        n: 'name',
+        l: 'low'
+      }
+    });
 
-    const params = OptionParser.parse([
-      ['-n', '--name STRING'],
-      ['-l', '--low'],
-    ], text.split(' '));
-
-    const title = text.split(' ')[3];
+    const title = params['_'][0];
     const userName = params.name || msg.message.user.name;
     const priority = params.low ? 'low' : 'high';
 
@@ -60,15 +61,15 @@ export default function(robot) {
     }).catch(Utils.error(msg));
   });
 
-  robot.respond(/todo done (.*)/i, msg => {
-    const text = msg.message.text;
-
-    const params = OptionParser.parse([
-      ['-n', '--name STRING']
-    ], msg.message.text.split(' '));
+  robot.respond(/todo done (.+)/i, msg => {
+    const params = args(Utils.argString(robot, 'todo done', msg.message.text), {
+      alias: {
+        n: 'name'
+      }
+    });
 
     const userName = params.name || msg.message.user.name;
-    const issueId = text.split(' ')[3];
+    const issueId = params['_'][0];
 
     const url = `${githubUrl}/repos/${userName}/todo/issues/${issueId}`;
     axios.patch(url, {
