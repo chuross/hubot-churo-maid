@@ -20,7 +20,9 @@ export default function(robot) {
 
   robot.respond(/docker ps/, msg => {
     const params = args(Utils.argString(robot, 'docker ps', msg.message.text), {
-      a: 'all'
+      alias: {
+        a: 'all'
+      }
     })
 
     msg.send(`${params.all ? '全ての' : ''}起動中のDockerコンテナを取得しますね`);
