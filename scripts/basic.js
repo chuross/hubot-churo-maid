@@ -7,7 +7,7 @@
 */
 export default function(robot) {
 
-  robot.respond(/おはよう/, msg => {
+  robot.respond(/おはよう$|ping$/, msg => {
     msg.send('おはようございます！今日も1日頑張っていきましょう！');
   });
 }

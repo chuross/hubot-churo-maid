@@ -1,0 +1,12 @@
+version: '2'
+services:
+  maid:
+    build: ./
+    image: chuross/hubot-maid
+    container_name: hubot-maid
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      HUBOT_SLACK_TOKEN: "${HUBOT_SLACK_TOKEN}"
+      HUBOT_MAID_GITHUB_URL: "${HUBOT_MAID_GITHUB_URL}"
+      HUBOT_MAID_GITHUB_TOKEN: ${HUBOT_MAID_GITHUB_TOKEN}
