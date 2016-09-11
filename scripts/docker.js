@@ -15,6 +15,7 @@ import { Utils } from './Utils'
 *   docker build :gitUrl
 *     --tmp 1日だけ立ち上げる
 *     --detach 起動時にホストを表示しない
+*   docker clean - 起動していないコンテナを全て削除
 */
 export default function(robot) {
 
