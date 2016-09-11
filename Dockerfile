@@ -7,10 +7,6 @@ RUN wget -qO- https://get.docker.com/ | sh
 RUN apt-get update && apt-get install -y redis-tools
 RUN npm install -g hubot coffee-script
 
-ENV HUBOT_SLACK_TOKEN ''
-ENV HUBOT_MAID_GITHUB_URL https://api.github.com
-ENV HUBOT_MAID_GITHUB_TOKEN ''
-
 ENV HUBOT_MAID_WORKDIR /workspace
 ENV REDIS_URL redis
 
