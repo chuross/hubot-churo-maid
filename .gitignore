@@ -2,4 +2,3 @@ node_modules
 .DS_Store*
 .hubot_history
 *.log
-docker-compose.yml
