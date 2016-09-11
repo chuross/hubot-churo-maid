@@ -8,5 +8,6 @@ services:
       - ./:/workspace/hubot
     environment:
       HUBOT_SLACK_TOKEN: "${HUBOT_SLACK_TOKEN_DEV}"
+      HUBOT_MAID_HOST: ${HUBOT_MAID_HOST_DEV}
       HUBOT_MAID_GITHUB_URL: "${HUBOT_MAID_GITHUB_URL_DEV}"
       HUBOT_MAID_GITHUB_TOKEN: "${HUBOT_MAID_GITHUB_TOKEN_DEV}"
