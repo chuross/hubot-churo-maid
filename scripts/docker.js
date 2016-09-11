@@ -26,7 +26,7 @@ export default function(robot) {
     })
 
     msg.send(`${params.all ? '全ての' : ''}起動中のDockerコンテナを取得しますね`);
-    process.exec(`docker ps`)
+    process.exec(`docker ps ${paramas.all ? '-a' : ''}`)
       .then(result => {
         msg.send(result.stdout);
       })
