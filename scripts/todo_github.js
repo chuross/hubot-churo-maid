@@ -36,7 +36,7 @@ export default function(robot) {
     axios.get(url, Object.assign({
       params: query
     }, githubHeader)).then(response => {
-      msg.send('今残っている仕事です！');
+      msg.send('今残っている仕事はこちらです！');
       response.data.forEach(issue => {
         msg.send(`・${getPriorityString(issue)} #${issue.number} *<${issue.html_url}|${issue.title}>*`);
       });
