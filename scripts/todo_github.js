@@ -6,13 +6,13 @@ import { Utils } from './Utils'
 * Description:
 *   GithubによるTodo管理
 * Commands:
-*   todo - タスク一覧を表示
+*   todo: タスク一覧を表示
 *     -a 全部表示
 *     -n 名前
-*   todo add :title - 指定タイトルでタスクを作る
+*   todo add [TITLE]: 指定タイトルでタスクを作る
 *     -l 優先度低
 *     -n 名前
-*   todo done :issue_id - 指定IDのタスクを終了する
+*   todo done [ISSUE_ID]: 指定IDのタスクを終了する
 *     -n 名前
 */
 const githubUrl = process.env.HUBOT_MAID_GITHUB_URL || 'https://api.github.com';
