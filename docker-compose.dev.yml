@@ -1,11 +1,11 @@
 version: '2'
 services:
   maid:
-    build: ./
-    image: chuross/hubot-maid
+    extends:
+      file: docker-compose.yml
+      service: maid
     container_name: hubot-maid-dev
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - ./:/workspace/hubot
     environment:
       HUBOT_SLACK_TOKEN: "${HUBOT_SLACK_TOKEN_DEV}"
