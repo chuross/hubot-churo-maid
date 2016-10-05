@@ -3,6 +3,8 @@ FROM node:6.5.0
 # setup docker
 RUN wget -qO- https://get.docker.com/ | sh
 
+EXPOSE 8080
+
 # setup maid-bot
 RUN apt-get update && apt-get install -y redis-tools
 RUN npm install -g hubot coffee-script
