@@ -23,14 +23,6 @@ export default function(robot) {
   * Githubからのprをフックして関連リンクを作る
   */
   robot.router.post('/github/deploygate/hook', (req, res) => {
-    const targetChannel = req.params.slackChannel || null;
-
-    if (!targetChannel) {
-      res.status(401).send('targetChannel is null.');
-      res.end();
-      return;
-    }
-
     const pullRequest = req.body.pull_request;
     const repository = req.body.repository;
 
