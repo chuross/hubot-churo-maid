@@ -55,8 +55,8 @@ export default function(robot) {
       .then(deploygateResponse => axios.post(pullRequest.statuses_url, {
           state: 'success',
           target_url: response.results.file
-        }, githubHeader))
-        .then(statusesResponse => deploygateResponse);
+        }, githubHeader)
+        .then(statusesResponse => deploygateResponse))
       .then(result => {
         robot.emit('slack.attachment', {
           content: {
