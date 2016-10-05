@@ -11,6 +11,7 @@ const githubHeader = { headers: { Authorization: `token ${githubToken}` } }
 const deploygateOwner = process.env.HUBOT_MAID_DEPLOYGATE_OWNER;
 const deploygateToken = process.env.HUBOT_MAID_DEPLOYGATE_TOKEN;
 const deploygateUrl = `https://deploygate.com/api/users/${deploygateOwner}/apps`;
+const deploygateFetchUrl = process.env.HUBOT_MAID_DEPLOYGATE_FETCH_URL;
 const outputsVolumePath = process.env.HUBOT_MAID_OUTPUTS_VOLUME_PATH;
 const outputsPath = process.env.HUBOT_MAID_OUTPUTS_PATH || 'app/build/outputs/apk';
 const components = process.env.HUBOT_MAID_COMPONENTS;
@@ -36,7 +37,7 @@ export default function(robot) {
 
     childProcess.exec(`docker run
           -v ${outputsVolumePath}:/outputs
-          -e GIT_URL=${repository.clone_url}
+          -e GIT_URL=${deploygateFetchUrl}
           -e GIT_BRANCH=refs/pull/${pullRequest.id}/merge:
           -e GRADLE_OUTPUTS_PATH=${outputsPath}
           -e GRADLE_ASSEMBLE_COMMAND=${buildFlavor}
