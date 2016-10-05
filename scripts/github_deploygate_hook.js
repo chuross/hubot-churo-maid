@@ -11,10 +11,10 @@ const githubHeader = { headers: { Authorization: `token ${githubToken}` } }
 const deploygateOwner = process.env.HUBOT_MAID_DEPLOYGATE_OWNER;
 const deploygateToken = process.env.HUBOT_MAID_DEPLOYGATE_TOKEN;
 const deploygateUrl = `https://deploygate.com/api/users/${deploygateOwner}/apps`;
-const deploygateFetchUrl = process.env.HUBOT_MAID_DEPLOYGATE_FETCH_URL;
-const outputsPath = process.env.HUBOT_MAID_OUTPUT_PATH;
+const outputsVolumePath = process.env.HUBOT_MAID_OUTPUTS_VOLUME_PATH;
+const outputsPath = process.env.HUBOT_MAID_OUTPUTS_PATH || 'app/build/outputs/apk';
 const components = process.env.HUBOT_MAID_COMPONENTS;
-const apikFileName = process.env.HUBOT_MAID_APK_FILE_NAME;
+const apkFileName = process.env.HUBOT_MAID_APK_FILE_NAME;
 const buildFlavor = process.env.HUBOT_MAID_BUILD_FLAVOR || 'assembleDebug';
 
 export default function(robot) {
@@ -32,11 +32,13 @@ export default function(robot) {
     }
 
     const pullRequest = req.body.pull_request;
+    const repository = req.body.repository;
 
     childProcess.exec(`docker run
-          -v ${outputsPath}:/outputs
-          -e GIT_URL=${deploygateFetchUrl}
+          -v ${outputsVolumePath}:/outputs
+          -e GIT_URL=${repository.clone_url}
           -e GIT_BRANCH=refs/pull/${pullRequest.id}/merge:
+          -e GRADLE_OUTPUTS_PATH=${outputsPath}
           -e GRADLE_ASSEMBLE_COMMAND=${buildFlavor}
           -e ANDROID_COMPONENTS=${components}
           chuross/android-java7:git
@@ -45,8 +47,9 @@ export default function(robot) {
       .then(result => axios.post(deploygateUrl, {
         token: deploygateToken,
         file: result,
-        message: `PullRequest:${pullRequest.repo.name}#${pullRequest.id}`
+        message: `PullRequest:${repository.name}#${pullRequest.id}`
       }, {
+        'content-type': 'multipart/form-data'
       }))
       .then(deploygateResponse => axios.post(pullRequest.statuses_url, {
           state: 'success',
@@ -65,6 +68,9 @@ export default function(robot) {
           }
         });
         res.end();
-      }).catch(err => res.end());
+      }).catch(err => {
+        console.log(`web hook error! ${err}`);
+        res.end()
+      });
   });
 }
