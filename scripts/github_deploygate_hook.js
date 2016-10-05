@@ -11,12 +11,11 @@ const githubHeader = { headers: { Authorization: `token ${githubToken}` } }
 const deploygateOwner = process.env.HUBOT_MAID_DEPLOYGATE_OWNER;
 const deploygateToken = process.env.HUBOT_MAID_DEPLOYGATE_TOKEN;
 const deploygateUrl = `https://deploygate.com/api/users/${deploygateOwner}/apps`;
-const deploygateFetchUrl = process.env.HUBOT_MAID_DEPLOYGATE_FETCH_URL;
 const outputsVolumePath = process.env.HUBOT_MAID_OUTPUTS_VOLUME_PATH;
 const outputsPath = process.env.HUBOT_MAID_OUTPUTS_PATH || 'app/build/outputs/apk';
 const components = process.env.HUBOT_MAID_COMPONENTS;
 const apkFileName = process.env.HUBOT_MAID_APK_FILE_NAME;
-const buildFlavor = process.env.HUBOT_MAID_BUILD_FLAVOR || 'assembleDebug';
+const buildFlavor = process.env.HUBOT_MAID_BUILD_FLAVOR || 'Debug';
 
 export default function(robot) {
 
@@ -26,7 +25,7 @@ export default function(robot) {
   robot.router.post('/github/deploygate/hook', (req, res) => {
     const targetChannel = req.params.slackChannel || null;
 
-    if (!targetChannel)  {
+    if (!targetChannel) {
       res.status(401).send('targetChannel is null.');
       res.end();
       return;
@@ -37,10 +36,10 @@ export default function(robot) {
 
     childProcess.exec(`docker run
           -v ${outputsVolumePath}:/outputs
-          -e GIT_URL=${deploygateFetchUrl}
+          -e GIT_URL=${repository.clone_url.replace(/:\/\//, `://${githubToken}@`)}
           -e GIT_BRANCH=refs/pull/${pullRequest.id}/merge:
           -e GRADLE_OUTPUTS_PATH=${outputsPath}
-          -e GRADLE_ASSEMBLE_COMMAND=${buildFlavor}
+          -e GRADLE_ASSEMBLE_COMMAND=assemble${buildFlavor.charAt(0).toUpperCase() + buildFlavor.slice(1)}
           -e ANDROID_COMPONENTS=${components}
           chuross/android-java7:git
         `)
