@@ -21,6 +21,9 @@ const githubHeader = { headers: { Authorization: `token ${githubToken}` } }
 
 export default function(robot) {
 
+  /**
+  * TODOを取得する
+  */
   robot.respond(/todo$|todo -(.*)/i, msg => {
     const params = args(Utils.argString(robot, 'todo', msg.message.text), {
       alias: {
@@ -43,6 +46,9 @@ export default function(robot) {
     }).catch(Utils.error(msg));
   });
 
+  /**
+  * TODOを作成する
+  */
   robot.respond(/todo add (.+)$/i, msg => {
     const params = args(Utils.argString(robot, 'todo add', msg.message.text), {
       alias: {
@@ -66,6 +72,9 @@ export default function(robot) {
     }).catch(Utils.error(msg));
   });
 
+  /**
+  * TODOを終了する
+  */
   robot.respond(/todo done (.+)/i, msg => {
     const params = args(Utils.argString(robot, 'todo done', msg.message.text), {
       alias: {
@@ -85,6 +94,9 @@ export default function(robot) {
   });
 }
 
+/**
+* 優先度の文字列を取得する
+*/
 function getPriorityString(issue) {
   return issue.labels.filter(label => label.name === 'high').length > 0 ? '[*優先度高*]' : '[優先度低]';
 }
