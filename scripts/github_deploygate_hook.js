@@ -14,6 +14,7 @@ const deploygateUrl = `https://deploygate.com/api/users/${deploygateOwner}/apps`
 const deploygateFetchUrl = process.env.HUBOT_MAID_DEPLOYGATE_FETCH_URL;
 const outputsPath = process.env.HUBOT_MAID_OUTPUT_PATH;
 const components = process.env.HUBOT_MAID_COMPONENTS;
+const apikFileName = process.env.HUBOT_MAID_APK_FILE_NAME;
 const buildFlavor = process.env.HUBOT_MAID_BUILD_FLAVOR || 'assembleDebug';
 
 export default function(robot) {
@@ -40,7 +41,7 @@ export default function(robot) {
           -e ANDROID_COMPONENTS=${components}
           chuross/android-java7:git
         `)
-      .then(result => fs.readFile(file(outputsPath, { encoding: 'utf8' })))
+      .then(result => fs.readFile(file(`${outputsPath}/${apkFileName}`, { encoding: 'utf8' })))
       .then(result => axios.post(deploygateUrl, {
         token: deploygateToken,
         file: result,
