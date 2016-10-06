@@ -23,8 +23,18 @@ export default function(robot) {
   * Githubからのprをフックして関連リンクを作る
   */
   robot.router.post('/github/deploygate/hook', (req, res) => {
+    if (req.get('X-GitHub-Event') == 'ping') {
+      res.status(200).end();
+      return;
+    }
+
     const pullRequest = req.body.pull_request;
     const repository = req.body.repository;
+
+    if (!pullRequest || !repository) {
+      res.status(400).send('invalid event.').end();
+      return;
+    }
 
     childProcess.exec(`docker run
           -v ${outputsVolumePath}:/outputs
